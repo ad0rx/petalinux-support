@@ -1,0 +1,7 @@
+image:
+{
+  [bootloader]  zynqmp_fsbl.elf
+  [pmufw_image] pmufw.elf
+  u-boot.elf
+  [destination_device=pl] system.bit
+}

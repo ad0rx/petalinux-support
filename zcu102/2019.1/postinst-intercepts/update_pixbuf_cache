@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# This file:
+# build/tmp/work/zcu102_zynqmp-xilinx-linux/petalinux-user-image/1.0-r0/recipe-sysroot-native/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+
+# Needs to be here:
+# build/tmp/work/zcu102_zynqmp-xilinx-linux/petalinux-user-image/1.0-r0/rootfs/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+
+
+set -e
+
+#test aarch64
+echo "local setting libdir: ${libdir}"
+
+export GDK_PIXBUF_MODULEDIR=$D${libdir}/gdk-pixbuf-2.0/2.10.0/loaders
+export GDK_PIXBUF_FATAL_LOADER=1
+
+#PSEUDO_UNLOAD=1 ${binprefix}qemuwrapper -L $D $D${libdir}/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders \
+#    >$GDK_PIXBUF_MODULEDIR/../loaders.cache && \
+#    sed -i -e "s:$D::g" $GDK_PIXBUF_MODULEDIR/../loaders.cache
+
+LOADERS_CACHE=$STAGING_DIR_NATIVE/${libdir_native}/gdk-pixbuf-2.0/2.10.0/loaders.cache
+echo "Loaders Cache: ${LOADERS_CACHE}"
+
+PSEUDO_UNLOAD=1 ${binprefix}qemuwrapper -L $D $D${libdir}/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders \
+    >${LOADERS_CACHE} && \
+    sed -i -e "s:$D::g" ${LOADERS_CACHE}

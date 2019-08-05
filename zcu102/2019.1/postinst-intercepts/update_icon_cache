@@ -1,0 +1,21 @@
+#!/bin/sh
+# build/tmp/work/zcu102_zynqmp-xilinx-linux/petalinux-user-image/1.0-r0/recipe-sysroot-native/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+
+# Needs to be here:
+# build/tmp/work/zcu102_zynqmp-xilinx-linux/petalinux-user-image/1.0-r0/rootfs/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+
+set -e
+
+#test aarch64
+libdir_native=usr/lib
+echo "local setting libdir_native: ${libdir_native}"
+
+# update native pixbuf loaders
+$STAGING_DIR_NATIVE/${libdir_native}/gdk-pixbuf-2.0/gdk-pixbuf-query-loaders --update-cache
+
+for icondir in $D/usr/share/icons/*/ ; do
+    if [ -d $icondir ] ; then
+        gtk-update-icon-cache -fqt  $icondir
+    fi
+done
+
